@@ -24,7 +24,7 @@ minus.addEventListener('click', (event) => {
     plusMinusMonitor--
 })
 
-// Pause the counter
+// Pause the counter and disable the buttons
 let pauseButton = document.querySelector('#pause')
 pauseButton.addEventListener('click', (event) => {
     event.preventDefault()
@@ -42,8 +42,6 @@ pauseButton.addEventListener('click', (event) => {
         minus.disabled = false
     }
 })
-
-
 
 // Add likes to each number and dispaly them as a list
 let numbersArray = []
@@ -66,5 +64,16 @@ heart.addEventListener('click', (event) => {
         numbersArray.push(num)
         console.log(numbersArray)
     }
+})
+
+// Leave comments
+let form = document.querySelector('form')
+let list = document.getElementById('list')
+form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const comment = document.getElementById('comment-input').value
+    const p =  document.createElement('p')
+    p.innerText = comment
+    list.append(p)
 })
 
