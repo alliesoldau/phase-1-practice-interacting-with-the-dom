@@ -2,14 +2,16 @@
 let counter = document.querySelector('#counter')
 let plusMinusMonitor = 1 // start at 1 so it increments correctly
 counter.innerText = 0 // start the counter at zero
+let intervalID
 
-document.addEventListener('DOMContentLoaded', () => {
-    setInterval(function () {
-        counter.innerText = plusMinusMonitor++
-        // console.log(counter.innerText)
-        }, 1000)
-    })
-
+document.addEventListener('DOMContentLoaded', startCount) 
+function startCount() { counter.innerText = plusMinusMonitor++ }
+intervalID = setInterval(startCount, 1000)
+function refreshInterval() { 
+    counter.innerText = plusMinusMonitor++ 
+    intervalID = setInterval(startCount, 1000)
+}
+       
 // Manuallly increment and decrement the counter by clicking + and -
 let plus = document.querySelector('#plus')    
 plus.addEventListener('click', (event) => {
@@ -22,6 +24,28 @@ minus.addEventListener('click', (event) => {
     plusMinusMonitor--
 })
 
+// Pause the counter
+let pauseButton = document.querySelector('#pause')
+pauseButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    if (pauseButton.innerText === 'pause') {
+        pauseButton.innerText ='resume'
+        clearInterval(intervalID)
+        plus.disabled = true
+        heart.disabled = true
+        minus.disabled = true
+    } else {
+        pauseButton.innerText = 'pause'
+        refreshInterval(intervalID)
+        plus.disabled = false
+        heart.disabled = false
+        minus.disabled = false
+    }
+})
+
+
+
+// Add likes to each number and dispaly them as a list
 let numbersArray = []
 let numberOfLikes;
 
@@ -30,7 +54,6 @@ heart.addEventListener('click', (event) => {
     event.preventDefault()
     let currentNumber = document.querySelector('#counter')
     let num = currentNumber.innerText // grab the current ticker number 
-   // let showLikes = document.querySelector('.likes') // grab the ul where the lis should go
     if (numbersArray.includes(num)) {
         let matchingLi = document.getElementById(num) // grab the number that already exists
         matchingLi.innerText = `${num} was liked ${numberOfLikes++} times` // update it's likes by 1
